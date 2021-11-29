@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.larionov.math.Rect;
 import ru.larionov.screen.BaseScreen;
 import ru.larionov.sprite.impl.Background;
+import ru.larionov.sprite.impl.Logo;
 
 public class MenuScreen extends BaseScreen {
 
@@ -14,6 +15,7 @@ public class MenuScreen extends BaseScreen {
     private Vector2 pos;
 
     private Background background;
+    private Logo logo;
 
     @Override
     public void show() {
@@ -22,6 +24,7 @@ public class MenuScreen extends BaseScreen {
         bg = new Texture("textures/bg.png");
         pos = new Vector2();
         background = new Background(bg);
+        logo = new Logo(img);
     }
 
     @Override
@@ -33,8 +36,10 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        logo.update(delta, pos);
         batch.begin();
         background.draw(batch);
+        logo.draw(batch);
         batch.end();
     }
 
