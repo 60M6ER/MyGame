@@ -10,7 +10,7 @@ import ru.larionov.math.Rect;
 import ru.larionov.sprite.Sprite;
 
 public class Logo extends Sprite {
-
+    // Пометка для пулл реквеста
     private float v; // Скорость
     private Vector2 dist; // Расстояние между точкой нажатия и лого
 
