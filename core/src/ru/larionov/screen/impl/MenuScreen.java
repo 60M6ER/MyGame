@@ -16,7 +16,7 @@ import ru.larionov.sprite.impl.ButtonExit;
 import ru.larionov.sprite.impl.ButtonPlay;
 import ru.larionov.sprite.impl.Star;
 
-public class MenuScreen extends BaseScreen {
+public class MenuScreen extends BaseScreen implements Music.OnCompletionListener {
 
     private static final int STAR_COUNT = 256;
 
@@ -46,8 +46,12 @@ public class MenuScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        music.setOnCompletionListener(this);
         buttonExit = new ButtonExit(atlas);
         buttonPlay = new ButtonPlay(atlas, game, music);
+
+        music.play();
     }
 
     @Override
@@ -73,6 +77,8 @@ public class MenuScreen extends BaseScreen {
         super.dispose();
         bg.dispose();
         atlas.dispose();
+        if (!music.isPlaying())
+            music.dispose();
     }
 
     @Override
@@ -107,5 +113,10 @@ public class MenuScreen extends BaseScreen {
         buttonExit.draw(batch);
         buttonPlay.draw(batch);
         batch.end();
+    }
+
+    @Override
+    public void onCompletion(Music music) {
+        music.play();
     }
 }

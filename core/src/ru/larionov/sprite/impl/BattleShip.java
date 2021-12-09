@@ -1,6 +1,7 @@
 package ru.larionov.sprite.impl;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,21 +13,30 @@ public class BattleShip extends Sprite {
 
     private static final float HEIGHT = 0.15f;
     private static final float BOTTOM_MARGIN = 0.05f;
+    private static final float TIME_PER_FIRE = 1f;
+
+    private static final float BULLET_SOUND_VOLUME = 0.25f;
+
+    private Rect worldBounds;
 
     private final BulletPool bulletPool;
     private final TextureRegion bulletRegion;
-    private Rect worldBounds;
-    private final Vector2 v;
-    private Vector2 direction;
+    private Sound bulletSound;
     private final Vector2 bulletV;
     private final float bulletHeight;
     private final int damage;
     private float speed;
+
+    private final Vector2 v;
+    private Vector2 direction;
     int pointer;
 
-    public BattleShip(TextureAtlas atlas, BulletPool bulletPool) {
+    private float timer;
+
+    public BattleShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSound) {
         super(null);
         this.bulletPool = bulletPool;
+        this.bulletSound = bulletSound;
         TextureAtlas.AtlasRegion region = atlas.findRegion("main_ship");
         TextureRegion[][] split = region.split(region.getRegionWidth() / 2, region.getRegionHeight());
         this.bulletRegion = atlas.findRegion("bulletMainShip");
@@ -41,6 +51,7 @@ public class BattleShip extends Sprite {
         pointer = -1;
         v = new Vector2();
         direction = new Vector2(0, 0);
+        timer = TIME_PER_FIRE;
     }
 
     @Override
@@ -52,11 +63,16 @@ public class BattleShip extends Sprite {
 
     @Override
     public void update(float delta) {
+        timer += delta;
         if (direction.len() > 0){
             v.set(direction).scl(speed);
             if (v.x < 0 && this.worldBounds.getLeft() < getLeft()
                     || v.x > 0 && this.worldBounds.getRight() > getRight())
                 this.pos.mulAdd(v, delta);
+        }
+        if (timer >= TIME_PER_FIRE){
+            shoot();
+            timer = 0;
         }
         //this.pos.mulAdd(v, delta);
         //checkBounds();
@@ -118,6 +134,7 @@ public class BattleShip extends Sprite {
     private void shoot() {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
+        bulletSound.setVolume(bulletSound.play(), BULLET_SOUND_VOLUME);
     }
 
     private void checkBounds() {

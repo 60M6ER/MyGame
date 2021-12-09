@@ -2,6 +2,7 @@ package ru.larionov.screen.impl;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -13,12 +14,13 @@ import ru.larionov.sprite.impl.Background;
 import ru.larionov.sprite.impl.BattleShip;
 import ru.larionov.sprite.impl.Star;
 
-public class GameScreen extends BaseScreen {
+public class GameScreen extends BaseScreen implements Music.OnCompletionListener {
 
     private static final int STAR_COUNT = 128;
 
     private Texture bg;
     private Background background;
+    private Sound bulletSound;
 
     private BulletPool bulletPool;
 
@@ -44,8 +46,14 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
+        bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
 
-        battleShip = new BattleShip(atlas, bulletPool);
+        battleShip = new BattleShip(atlas, bulletPool, bulletSound);
+        if (music == null || !music.isPlaying()){
+            music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+            music.setOnCompletionListener(this);
+            music.play();
+        }
     }
 
     @Override
@@ -119,5 +127,10 @@ public class GameScreen extends BaseScreen {
         battleShip.draw(batch);
         bulletPool.drawActiveSprites(batch);
         batch.end();
+    }
+
+    @Override
+    public void onCompletion(Music music) {
+        music.play();
     }
 }
