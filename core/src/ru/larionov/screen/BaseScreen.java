@@ -3,6 +3,7 @@ package ru.larionov.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix3;
@@ -23,6 +24,8 @@ public class BaseScreen implements Screen, InputProcessor {
 
     private Matrix4 worldToGl;
     private Matrix3 screenToWorld;
+
+    protected Music music;
 
     private Vector2 touch;
 

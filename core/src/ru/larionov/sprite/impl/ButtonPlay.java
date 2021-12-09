@@ -1,6 +1,7 @@
 package ru.larionov.sprite.impl;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.larionov.math.Rect;
@@ -14,9 +15,11 @@ public class ButtonPlay extends BaseButton {
     private static final float MARGIN = 0.03f;
 
     private final Game game;
+    private Music music;
 
-    public ButtonPlay(TextureAtlas atlas, Game game) {
+    public ButtonPlay(TextureAtlas atlas, Game game, Music music) {
         super(atlas.findRegion("btPlay"));
+        this.music = music;
         this.game = game;
     }
 
@@ -30,6 +33,6 @@ public class ButtonPlay extends BaseButton {
 
     @Override
     public void action() {
-        game.setScreen(new GameScreen());
+        game.setScreen(new GameScreen(music));
     }
 }

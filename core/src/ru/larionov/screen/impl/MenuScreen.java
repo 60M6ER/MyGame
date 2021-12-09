@@ -1,9 +1,13 @@
 package ru.larionov.screen.impl;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+
+import javax.annotation.processing.Completion;
 
 import ru.larionov.math.Rect;
 import ru.larionov.screen.BaseScreen;
@@ -43,7 +47,7 @@ public class MenuScreen extends BaseScreen {
             stars[i] = new Star(atlas);
         }
         buttonExit = new ButtonExit(atlas);
-        buttonPlay = new ButtonPlay(atlas, game);
+        buttonPlay = new ButtonPlay(atlas, game, music);
     }
 
     @Override
